@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "web-dev-server": "^3.0.27",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^6.0.1"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3",
+    "webpack-dev-server": "^5.2.2"
+  },
+  "name": "leccion05modulos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "modulos.js",
+  "scripts": {
+    "start": "webpack serve --mode development"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

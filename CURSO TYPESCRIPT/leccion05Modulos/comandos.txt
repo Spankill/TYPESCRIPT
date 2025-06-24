@@ -1,0 +1,139 @@
+Estructurar los archivos de la siguiente forma:
+leccion05Modulos/
+│
+├── dist/
+│   ├── index.html
+│   └── modulos.js
+│
+├── src/
+│   ├── persona.ts
+│   └── modulos.ts
+│
+├── index.html (opcional en raíz mucho cuidado con linkear el script a modulos.js le generado por webpack)
+├── package.json
+├── tsconfig.json
+└── webpack.config.js
+
+en terminal :
+
+tsc -init
+tsc -w 
+
+// al intentar ver por consola la clase persona1
+no se puede ver, entonces para ver necesitamos via webpack (empaquetar y distribuir)
+
+por terminal :
+//instalamos
+npm install webpack-dev-server --save-dev
+
+(ser crearon una carpeta NODE_MODULES y un archivo package-lock.json)
+
+//instalamos typescript loader
+npm install typescript ts-loader --save-dev
+
+()
+
+creamos nuestro archivo package.json con:
+npm init -y
+
+luego creamos un archivo dentro de la carpeta leccion05 llamado:
+
+webpack.config.json
+e insertamos en este archivo el siguiente codigo:
+const path = require('path');
+
+module.exports = {
+  entry: './src/modulos.ts',
+  output: {
+    filename: 'modulos.js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js']
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      }
+    ]
+  },
+  //para trabajar exclusivamente el index en esta carpeta sino no reconoce los modulos trabajados
+  devServer: {
+    static: './dist',
+    hot: true,
+    open: true
+  }
+};
+
+
+
+En package.json revisar si tiene los "scripts":
+"scripts": {
+  "start": "webpack serve --mode development"
+}
+
+
+luego podemos iniciar nuestro servidor via terminal con :
+
+npm start 
+
+
+
+
+
+**en caso de errores :
+# Instala dependencias (si faltan)
+npm install
+
+# Compila y sirve
+npm start
+
+por si surgen errores 
+** para indicar a webpack que sirva los archivos desde dist/
+npx webpack serve --static dist
+
+**Opcional AUTOMATIZAR ( Usar publicPath o copiar automáticamente)
+Si quieres dejar tu index.html en la raíz del proyecto, puedes usar un plugin como HtmlWebpackPlugin para que te lo copie automáticamente a dist/
+Instalamos:
+npm install html-webpack-plugin --save-dev
+Configuramos en webpack.config.js
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+
+module.exports = {
+  entry: './src/modulos.ts',
+  output: {
+    filename: 'modulos.js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js']
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      }
+    ]
+  },
+  devServer: {
+    static: './dist',
+    hot: true,
+    open: true
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './index.html' // Copia index.html a dist/
+    })
+  ]
+};
+
+Con esto, no importa dónde esté tu index.html, ¡Webpack lo usa y lo sirve correctamente!
+
